@@ -70,4 +70,4 @@ The task management and HTTP request-response sequence between the client and th
 are implemenented in the [Asynchronous Web Service](https://github.com/anilnairxyz/AsyncWebApp) project
 One could use Gevent or Celery for the task management and Redis or Rabbit as the message broker.
 
-[!Async Web App](https://github.com/anilnairxyz/Geoview/blob/master/AsyncWebApp.png)
+![Async Web App](https://github.com/anilnairxyz/Geoview/blob/master/AsyncWebApp.png)
