@@ -65,3 +65,9 @@ services:
 
 ![ImageStore Implementation](https://github.com/anilnairxyz/Geoview/blob/master/ImageStore2.png)
 
+### Asynchronous web service
+The task management and HTTP request-response sequence between the client and the server as shown in the above diagram
+are implemenented in the [Asynchronous Web Service](https://github.com/anilnairxyz/AsyncWebApp) project
+One could use Gevent or Celery for the task management and Redis or Rabbit as the message broker.
+
+[!Async Web App](https://github.com/anilnairxyz/Geoview/blob/master/AsyncWebApp.png)
