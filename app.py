@@ -5,7 +5,7 @@ A flask microservice API that:
     - Retrieve an uploaded image using the identifier
     - Retrieve other file types (transformations from the original)
       using the same identified (different file type parameter)
-For this microservice we do not deal with images directly but only 
+For this microservice we do not deal with images directly but only
 use image metadata to mock operations on images
 """
 import logging
@@ -28,6 +28,7 @@ def _image_check(image_type):
     if image_type in ALLOWED_TYPES:
         return True
     return False
+
 
 @app.route('/upload', methods=['POST'])
 def upload():
@@ -66,6 +67,7 @@ def upload():
         response['message'] = 'Failed to upload image'
         app.logger.error(e)
         return make_response(jsonify(response), 500)
+
 
 @app.route('/download/<image_id>', methods=['GET'])
 def download(image_id):
@@ -107,6 +109,7 @@ def download(image_id):
         response['message'] = 'Failed to download image'
         app.logger.error(e)
         return make_response(jsonify(response), 500)
+
 
 @app.errorhandler(404)
 def url_not_found(error):

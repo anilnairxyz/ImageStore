@@ -9,7 +9,11 @@ This will be replaced by a scalable image storage mechanism like AWS S3
 import os
 import json
 
+
 class Storage(object):
+    """
+    Here we use a simple directory structure with 2 levels of hierarchy.
+    """
 
     UPLOAD_FOLDER = os.environ['STORAGE_FOLDER']
 

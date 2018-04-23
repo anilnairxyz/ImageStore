@@ -1,4 +1,3 @@
-import copy
 from app import app
 from flask import json
 
