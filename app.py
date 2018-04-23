@@ -2,9 +2,13 @@
 """
 A flask microservice API that:
     - Can receive an uploaded image and return a unique identifier
+    - Retrieve an uploaded image using the identifier
+    - Retrieve other file types (transformations from the original)
+      using the same identified (different file type parameter)
+For this microservice we do not deal with images directly but only 
+use image metadata to mock operations on images
 """
 import logging
-import os # may not be needed here
 import uuid
 from logging.handlers import TimedRotatingFileHandler
 from flask import Flask, request, jsonify, make_response
@@ -16,13 +20,12 @@ app = Flask(__name__)
 storage = Storage()
 
 
-def _image_check(image, image_type):
+def _image_check(image_type):
     """
     Check whether the file is really a valid image.
     Here we are only checking the extension of the file
     """
-    if ((image.filename).lower().endswith(ALLOWED_TYPES) and
-          image_type in ALLOWED_TYPES):
+    if image_type in ALLOWED_TYPES:
         return True
     return False
 
@@ -38,26 +41,31 @@ def upload():
         200:
             Image succesfully uploaded and ID generated
     """
-    image = request.files['image']
-    image_type = request.form['type']
-    if image and _image_check(image, image_type):
-        try:
+    try:
+        image = request.get_json()
+        image_name = image.get('filename')
+        image_type = image.get('type')
+        transform = image.get('transform')
+        image_id = image.get('id')
+        if not (image and _image_check(image_type)):
+            raise TypeError
+        if not image_id:
             image_id = str(uuid.uuid4())
-            if not storage.save_image(image, image_type, image_id):
-                raise Exception
-            response = {'image ID': image_id, 'status': 'OK'}
-            response['message'] = 'Image succesfully uploaded'
-            return make_response(jsonify(response), 200)
-        except Exception as e:
-            response = {'status': 'Error'}
-            response['message'] = 'Failed to upload image'
-            app.logger.error(e)
-            return make_response(jsonify(response), 500)
-    else:    
+        if not storage.save_image(image_name, image_type, image_id, transform):
+            raise Exception
+        response = {'image ID': image_id, 'status': 'OK'}
+        response['message'] = 'Image succesfully uploaded'
+        return make_response(jsonify(response), 200)
+    except TypeError:
         response = {'status': 'Error'}
         response['message'] = 'Unsupported file type'
         app.logger.info(response['message'])
         return make_response(jsonify(response), 415)
+    except Exception as e:
+        response = {'status': 'Error'}
+        response['message'] = 'Failed to upload image'
+        app.logger.error(e)
+        return make_response(jsonify(response), 500)
 
 @app.route('/download/<image_id>', methods=['GET'])
 def download(image_id):
@@ -120,8 +128,17 @@ def method_not_allowed(error):
     return make_response(jsonify(response), 405)
 
 
+@app.route("/healthcheck", methods=['GET'])
+def healthcheck():
+    """
+    Basic healthcheck
+    """
+    response = {'status': 200, 'message': 'Connection fine'}
+    return make_response(jsonify(response), 200)
+
+
 if __name__ == '__main__':
-    logfile = 'log/api.log'
+    logfile = 'log/app.log'
     handler = TimedRotatingFileHandler(logfile, when='midnight', interval=1)
     formatter = logging.Formatter(fmt='%(asctime)s %(levelname)s %(message)s',
                                   datefmt='%d-%m-%Y %H:%M:%S')
