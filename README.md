@@ -19,6 +19,7 @@ This includes two microservices in 2 separate Git repositories
 
 ## To run both services on a local machine
 - For ImageStore
+
 ```pip install -r requirements.txt```<br>
 ```export STORAGE_FOLDER=<path to your temp folder>```<br>
 ```mkdir <path to your temp folder>```<br>
@@ -26,6 +27,7 @@ This includes two microservices in 2 separate Git repositories
 ```python app.py```<br>
 
 - For ImageCompress
+
 ```pip install -r requirements.txt```<br>
 ```export STORE_URL=<url path to ImageStore service>```<br>
 ```mkdir log```<br>
