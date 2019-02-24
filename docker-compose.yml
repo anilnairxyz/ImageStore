@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+  store:
+    build: './ImageStore'
+    container_name: store
+    ports:
+      - 8000:8000
+    environment:
+      STORAGE_FOLDER: "/app/tmp"
+
+  compress:
+    build: './ImageCompress'
+    ports:
+      - 9000:9000
+    links:
+      - "store:imagestore"
+    environment:
+      STORE_URL: "http://store:8000"
