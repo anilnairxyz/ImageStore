@@ -5,8 +5,6 @@ This includes two microservices in 2 separate Git repositories
 - ImageStore
 - [ImageCompress](https://github.com/anilnairxyz/ImageCompress)
 
-![ImageStore Implementation](https://github.com/anilnairxyz/Geoview/blob/master/ImageStore1.png)
-
 ### The ImageStore microservice:
 - Receives an uploaded image and returns a unique identifier which can then be used to retrieve the image
 - Different image formats can be returned by using different extensions against the image ID
@@ -65,12 +63,7 @@ services:
 
 ## A more practical architecture
 
-![ImageStore Implementation](https://github.com/anilnairxyz/Geoview/blob/master/ImageStore2.png)
-
-### Asynchronous web service
-The task management and HTTP request-response sequence between the client and the server as shown in the above diagram
-are implemenented in the [Asynchronous Web Service](https://github.com/anilnairxyz/AsyncWebApp) project.
+The task management and HTTP request-response sequence between the client and the server can
+be implemenented as in the [Asynchronous Web Service](https://github.com/anilnairxyz/AsyncWebApp) project.
 
 One could use Gevent or Celery for the task management and Redis or Rabbit as the message broker.
-
-![Async Web App](https://github.com/anilnairxyz/Geoview/blob/master/AsyncWebApp.png)
